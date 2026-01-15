@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: https://github.com/qa-tech-training/qasree-deploy
+                git url: 'https://github.com/qa-tech-training/qasree-deploy', branch: 'main'
             }
         }
         stage('Deploy to GKE') {
