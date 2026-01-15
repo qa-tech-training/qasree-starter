@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+    environment {
+        PROJECT_ID = '<YOUR_PROJECT_ID>' // replace with value from qwiklabs
+        CLUSTER_NAME = 'lab-gke'
+        LOCATION = '<YOUR_CLUSTER_LOCATION>' //replace with the appropriate zone
+        NAMESPACE = 'webapp'
+        CREDENTIALS_ID = 'GOOGLE_SA'
+        DOCKER_UNAME = '<YOUR DOCKERHUB USERNAME>' // replace with your DockerHub username
+        APP_HOST = '<IP of webapp service>' // replace with the external IP retrieved in step 1
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: https://github.com/qa-tech-training/qasree-deploy
+            }
+        }
+        stage('Deploy to GKE') {
+            steps {
+                sh "sed -i 's|<IMAGE_TAG>|${DOCKER_UNAME}/devops-webapp:${BUILD_NUMBER}|g;' k8s/deploy.yml"
+                step([
+                $class: 'KubernetesEngineBuilder',
+                projectId: env.PROJECT_ID,
+                clusterName: env.CLUSTER_NAME,
+                location: env.LOCATION,
+                manifestPattern: 'k8s/deploy.yml',
+                namespace: env.NAMESPACE,
+                credentialsId: env.CREDENTIALS_ID,
+                verifyDeployments: true,
+                verifyTimeoutInMinutes: 5])
+            }
+        }
+      /*
+      stage("Execute Load Tests") {
+          steps {
+              script {
+                  docker.withTool('docker-latest') {
+                      sh "mkdir taurus-out"
+                      sh "docker run -v ./bzt:/tests -v ./taurus-out:/tmp/artifacts blazemeter/taurus /tests/load.yml"
+                  }
+              }
+          }
+      }
+      stage('Deploy to GKE') {
+          steps {
+              sh "sed -i 's|build|${BUILD_NUMBER}|g;' ctk/experiment.yml"
+              step([
+              $class: 'KubernetesEngineBuilder',
+              projectId: env.PROJECT_ID,
+              clusterName: env.CLUSTER_NAME,
+              location: env.LOCATION,
+              manifestPattern: 'ctk/*.yml',
+              namespace: env.NAMESPACE,
+              credentialsId: env.CREDENTIALS_ID,
+              verifyDeployments: false])
+          }
+      }
+      */
+    }
+}
