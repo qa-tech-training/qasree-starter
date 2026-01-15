@@ -25,7 +25,7 @@ node {
             sh "printenv"
             sh "pwd"
             sh "ls -la"
-            def image = docker.build("${DOCKERHUB_REPO}:latest", "./docker")
+            sh "docker build -t ${DOCKERHUB_REPO}:latest --build-arg SPLUNK_HOST=${SPLUNK_HOSTNAME} ./docker"
         }
     }
 
