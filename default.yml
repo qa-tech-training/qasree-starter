@@ -9,7 +9,7 @@ config:
   defaults_dir: /tmp/defaults
   env:
     headers: null
-    var: SPLUNK_DEFAULTS_URL
+    var: https://raw.githubusercontent.com/qa-tech-training/qasree-starter/refs/heads/main/default.yml
     verify: true
   host:
     headers: null
