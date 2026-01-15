@@ -135,7 +135,7 @@ splunk:
     secret: wpLDpywDI8KGw4vChE1xYkbCusOlIBEvEcK9A11jw6DCmw==
   skip_cluster_bundle_push: false
   smartstore: null
-  splunk_http_enabled: false
+  splunk_http_enabled: true
   ssl:
     ca: null
     cert: null
