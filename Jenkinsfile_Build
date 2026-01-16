@@ -1,6 +1,6 @@
 //START-OF-SCRIPT
 node {
-    def SPLUNK_HOSTNAME='splunk-svc.splunk.svc.cluster.local'
+    // def SPLUNK_HOSTNAME='splunk-svc.splunk.svc.cluster.local'
     def DOCKER_HOME = tool name: 'docker-latest'
     def GRADLE_HOME = tool name: 'gradle-4.10.2', type: 'hudson.plugins.gradle.GradleInstallation'
     def REPO_URL = 'https://github.com/qa-tech-training/devops-webapp.git'
@@ -25,7 +25,7 @@ node {
             sh "printenv"
             sh "pwd"
             sh "ls -la"
-            sh "docker build -t ${DOCKERHUB_REPO}:latest --build-arg SPLUNK_HOST=${SPLUNK_HOSTNAME} ./docker"
+            sh "docker build -t ${DOCKERHUB_REPO}:latest --build-arg SPLUNK_HOST=`curl -s ip.me` ./docker"
         }
     }
 
